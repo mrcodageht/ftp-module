@@ -1,0 +1,97 @@
+package com.mrccommunity.ftpmodule.ftp;
+
+import org.apache.commons.net.ftp.FTP;
+import org.apache.commons.net.ftp.FTPFile;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collection;
+
+public record FTPUtils(FtpClient ftp) {
+    private static final Logger log = LogManager.getLogger(FTPUtils.class);
+
+    public void upFTP() {
+        try {
+
+            this.ftp.open();
+            this.ftp.getFtp().setFileType(FTP.BINARY_FILE_TYPE);
+            log.info("Connexion avec le serveur ftp");
+        } catch (IOException e) {
+            log.error("e: ", e);
+            log.error("Erreur lors de la connexion : {}", e.getMessage());
+        }
+    }
+
+    public void downFTP() {
+        try {
+            this.ftp.close();
+            log.info("Deconnexion avec le serveur ftp");
+        } catch (IOException e) {
+            log.error("Error lors de la deconnexion : {}", e.getMessage());
+        }
+    }
+
+    public Collection<String> listFiles(String path) throws IOException {
+        upFTP();
+        FTPFile[] files = this.ftp.getFtp().listFiles(path);
+        downFTP();
+        return Arrays.stream(files)
+                .filter(FTPFile::isFile)
+                .map(FTPFile::getName)
+                .toList();
+    }
+
+    public void downloadFile(String f_source, String f_destination) throws IOException {
+        upFTP();
+        FileOutputStream fos = new FileOutputStream(f_destination);
+        this.ftp.getFtp().retrieveFile(f_source, fos);
+        downFTP();
+    }
+
+    public void uploadingFile(File file, String path) throws IOException {
+        log.info("Taille fichier à envoyer : {}", file.length());
+        log.info("Chemin FTP de destination : {}", path);
+        upFTP();
+
+        try (FileInputStream fis = new FileInputStream(file)) {
+            boolean result = this.ftp.getFtp().storeFile(path, fis);
+            if (!result) {
+                throw new IOException("Échec du transfert FTP du fichier : " + file.getName());
+            }
+            log.info("Fichier FTP envoyé avec succès : {} ({} bytes)", file.getName(), file.length());
+        } catch (IOException e) {
+            log.error("Erreur lors de l'envoi du fichier {} : {}", file.getName(), e.getMessage());
+            throw e;
+        } finally {
+            downFTP();
+        }
+    }
+
+
+    public boolean createFolder(String folderName) throws IOException {
+        upFTP();
+        String newDirectoryPath = "/";
+        boolean isCreated = this.ftp.getFtp()
+                .makeDirectory(newDirectoryPath + File.separator + folderName);
+        downFTP();
+        return isCreated;
+    }
+
+    public boolean doesFtpDirectoryExist(String directoryPath) throws IOException {
+
+
+        upFTP();
+        if (this.ftp.getFtp().changeWorkingDirectory(directoryPath)) {
+            this.ftp.getFtp().changeWorkingDirectory("/");
+            downFTP();
+            return true;
+        }
+        downFTP();
+        return false;
+    }
+}
