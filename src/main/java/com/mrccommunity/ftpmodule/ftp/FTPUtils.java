@@ -12,9 +12,10 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 
-public record FTPUtils(FtpClient ftp) {
+public record FTPUtils(FtpClient ftp) implements IFtpClient {
     private static final Logger log = LogManager.getLogger(FTPUtils.class);
 
+    @Override
     public void upFTP() {
         try {
 
@@ -27,6 +28,7 @@ public record FTPUtils(FtpClient ftp) {
         }
     }
 
+    @Override
     public void downFTP() {
         try {
             this.ftp.close();
@@ -36,6 +38,7 @@ public record FTPUtils(FtpClient ftp) {
         }
     }
 
+    @Override
     public Collection<String> listFiles(String path) throws IOException {
         upFTP();
         FTPFile[] files = this.ftp.getFtp().listFiles(path);
@@ -46,6 +49,7 @@ public record FTPUtils(FtpClient ftp) {
                 .toList();
     }
 
+    @Override
     public void downloadFile(String f_source, String f_destination) throws IOException {
         upFTP();
         FileOutputStream fos = new FileOutputStream(f_destination);
@@ -53,6 +57,7 @@ public record FTPUtils(FtpClient ftp) {
         downFTP();
     }
 
+    @Override
     public void uploadingFile(File file, String path) throws IOException {
         log.info("Taille fichier à envoyer : {}", file.length());
         log.info("Chemin FTP de destination : {}", path);
@@ -73,6 +78,7 @@ public record FTPUtils(FtpClient ftp) {
     }
 
 
+    @Override
     public boolean createFolder(String folderName) throws IOException {
         upFTP();
         String newDirectoryPath = "/";
@@ -82,8 +88,8 @@ public record FTPUtils(FtpClient ftp) {
         return isCreated;
     }
 
+    @Override
     public boolean doesFtpDirectoryExist(String directoryPath) throws IOException {
-
 
         upFTP();
         if (this.ftp.getFtp().changeWorkingDirectory(directoryPath)) {

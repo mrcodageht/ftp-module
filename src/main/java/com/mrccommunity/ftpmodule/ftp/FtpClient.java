@@ -1,5 +1,6 @@
 package com.mrccommunity.ftpmodule.ftp;
 
+import com.mrccommunity.ftpmodule.config.FtpConfig;
 import lombok.*;
 import org.apache.commons.net.PrintCommandListener;
 import org.apache.commons.net.ftp.FTPClient;
@@ -12,28 +13,35 @@ import java.io.PrintWriter;
 
 
 @AllArgsConstructor
-@NoArgsConstructor
+//@NoArgsConstructor
 @ToString
 public class FtpClient {
     private static final Logger log = LogManager.getLogger(FtpClient.class);
+//    @Getter
+//    @Setter
+//    private String server;
+//    @Getter
+//    @Setter
+//    private Integer port;
+//    @Getter
+//    @Setter
+//    private String user;
+//    @Getter
+//    @Setter
+//    private String password;
+
     @Getter
-    @Setter
-    private String server;
+    FtpConfig ftpConfig;
+
     @Getter
-    @Setter
-    private Integer port;
-    @Getter
-    @Setter
-    private String user;
-    @Getter
-    @Setter
-    private String password;
-    @Getter
-    @Setter
     private FTPClient ftp;
 
-    public void open() throws IOException {
+    public FtpClient(FtpConfig ftpConfig){
+        this.ftpConfig = ftpConfig;
         this.ftp = new FTPClient();
+    }
+
+    public void open() throws IOException {
         ftp.addProtocolCommandListener(
                 new PrintCommandListener(
                         new PrintWriter(System.out)
@@ -41,18 +49,22 @@ public class FtpClient {
         );
         log.info("Informations de login : {}",this);
 
-        this.ftp.connect(this.server,this.port);
+        this.ftp.connect(this.ftpConfig.server(),this.ftpConfig.port());
         int reply = this.ftp.getReplyCode();
         if(!FTPReply.isPositiveCompletion(reply)){
             ftp.disconnect();
             throw new IOException("Erreur lors de la connexion avec le server ftp");
         }
 
-        if(!this.ftp.login(this.user,this.password)) log.error("==> La connexion avec le serveur ftp {} n'a pas ete etablie.",this.server);
+        if(!this.ftp.login(this.ftpConfig.user(), this.ftpConfig.password())) log.error("==> La connexion avec le serveur ftp {} n'a pas ete etablie.",this.ftpConfig.server());
         this.ftp.enterLocalPassiveMode();
     }
 
     public void close() throws IOException {
         ftp.disconnect();
+    }
+
+    public FtpClient getInstance(){
+        return this;
     }
 }

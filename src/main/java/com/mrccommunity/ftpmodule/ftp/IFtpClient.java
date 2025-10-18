@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 
-public interface FTPInterface {
+public interface IFtpClient {
 
     void upFTP();
     void downFTP();
