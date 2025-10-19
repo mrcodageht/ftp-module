@@ -12,28 +12,14 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 
+@Getter
 @AllArgsConstructor
-//@NoArgsConstructor
 @ToString
 public class FtpClient {
     private static final Logger log = LogManager.getLogger(FtpClient.class);
-//    @Getter
-//    @Setter
-//    private String server;
-//    @Getter
-//    @Setter
-//    private Integer port;
-//    @Getter
-//    @Setter
-//    private String user;
-//    @Getter
-//    @Setter
-//    private String password;
 
-    @Getter
     private FtpConfig ftpConfig;
 
-    @Getter
     private FTPClient ftp;
 
     public FtpClient(FtpConfig ftpConfig){
@@ -42,12 +28,6 @@ public class FtpClient {
     }
 
     public void open() throws IOException {
-        ftp.addProtocolCommandListener(
-                new PrintCommandListener(
-                        new PrintWriter(System.out)
-                )
-        );
-        log.info("Informations de login : {}",this);
 
         this.ftp.connect(this.ftpConfig.server(),this.ftpConfig.port());
         int reply = this.ftp.getReplyCode();
@@ -64,7 +44,4 @@ public class FtpClient {
         ftp.disconnect();
     }
 
-    public FtpClient getInstance(){
-        return this;
-    }
 }
