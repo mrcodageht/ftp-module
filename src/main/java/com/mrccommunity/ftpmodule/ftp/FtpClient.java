@@ -31,7 +31,7 @@ public class FtpClient {
 //    private String password;
 
     @Getter
-    FtpConfig ftpConfig;
+    private FtpConfig ftpConfig;
 
     @Getter
     private FTPClient ftp;
