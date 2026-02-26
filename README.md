@@ -1,5 +1,3 @@
-# FTP Module
-
 # FTP Module – Java Utility Library
 
 Ce projet est un module Java réutilisable permettant de gérer facilement les connexions et opérations FTP sans avoir à réimplémenter toute la logique de communication.
