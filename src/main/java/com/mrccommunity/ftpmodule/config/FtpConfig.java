@@ -1,11 +1,21 @@
 package com.mrccommunity.ftpmodule.config;
 
-public record FtpConfig(
-         String server,
+import lombok.*;
+import org.jspecify.annotations.NullMarked;
 
-         Integer port,
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@NullMarked
+@ToString
+public class FtpConfig{
+         private String server;
 
-         String user,
+         private Integer port;
 
-         String password
-) { }
+         private String user;
+
+         private String password;
+}

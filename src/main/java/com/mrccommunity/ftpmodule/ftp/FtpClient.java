@@ -9,7 +9,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 
 
 @Getter
@@ -22,6 +24,8 @@ public class FtpClient {
 
     private FTPClient ftp;
 
+    private boolean isLogActivate = true;
+
     public FtpClient(FtpConfig ftpConfig){
         this.ftpConfig = ftpConfig;
         this.ftp = new FTPClient();
@@ -29,14 +33,22 @@ public class FtpClient {
 
     public void open() throws IOException {
 
-        this.ftp.connect(this.ftpConfig.server(),this.ftpConfig.port());
+        this.ftp.connect(this.ftpConfig.getServer(),this.ftpConfig.getPort());
         int reply = this.ftp.getReplyCode();
         if(!FTPReply.isPositiveCompletion(reply)){
             ftp.disconnect();
             throw new IOException("Erreur lors de la connexion avec le server ftp");
         }
 
-        if(!this.ftp.login(this.ftpConfig.user(), this.ftpConfig.password())) log.error("==> La connexion avec le serveur ftp {} n'a pas ete etablie.",this.ftpConfig.server());
+        if(isLogActivate){
+            ftp.addProtocolCommandListener(
+                    new PrintCommandListener(
+                            new PrintWriter(new OutputStreamWriter(System.out, StandardCharsets.UTF_8)), true));
+
+        }
+
+        if(!this.ftp.login(this.ftpConfig.getUser(), this.ftpConfig.getPassword()))
+            log.error("==> La connexion avec le serveur ftp {} n'a pas ete etablie.",this.ftpConfig.getServer());
         this.ftp.enterLocalPassiveMode();
     }
 

@@ -1,5 +1,6 @@
 package com.mrccommunity.ftpmodule.config;
 
+import com.mrccommunity.ftpmodule.TestConfig;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,8 +24,9 @@ public class AppConfig {
     private String name;
     private String version;
 
-//    @Bean
-//    public FtpConfig getFtpConfig(){
-//        return new FtpConfig();
-//    }
+
+   @Bean
+   public TestConfig testConfig() {
+       return new TestConfig();
+   }
 }
