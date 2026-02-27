@@ -57,7 +57,7 @@ L’objectif du **FTP Module** est de :
 
 Exemple d’utilisation avec variables d’environnement ou fichier de configuration :
 
-```
+```bash
 FTP_HOST=ftp.example.com
 FTP_PORT=port
 FTP_USERNAME=youruser
@@ -101,15 +101,15 @@ public class Main {
         
         // Testons notre server ftp avec le module
 				
-				// Test 1 : Recuperation des fichiers du server ftp
+        // Test 1 : Recuperation des fichiers du server ftp
         var list = ftpClient.listFiles("/");
 
         list.forEach(file -> {
             System.out.printf("filename : %s \n",file);
         });
 
-				// Test 2 : Sauvegarder un fichier local sur le server ftp
-				// Dans ce test nous utilisons class [Resource] fournie par le context spring pour manipuler les fichiers plus proprement.
+        // Test 2 : Sauvegarder un fichier local sur le server ftp
+        // Dans ce test nous utilisons class [Resource] fournie par le context spring pour manipuler les fichiers plus proprement.
         Resource resource = new ClassPathResource("lego_scrum_week_1.md");
 
         if(resource.exists() && resource.isFile()){
@@ -199,4 +199,4 @@ public class FtpService {
 
 # Credits
 
-Autheur: Wesner Philogene
+_**Autheur :**_ Wesner Philogene
