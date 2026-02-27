@@ -15,21 +15,17 @@ import java.nio.charset.StandardCharsets;
 
 
 @Getter
-@AllArgsConstructor
+@Builder
 @ToString
 public class FtpClient {
+
     private static final Logger log = LogManager.getLogger(FtpClient.class);
 
     private FtpConfig ftpConfig;
 
     private FTPClient ftp;
 
-    private boolean isLogActivate = true;
-
-    public FtpClient(FtpConfig ftpConfig){
-        this.ftpConfig = ftpConfig;
-        this.ftp = new FTPClient();
-    }
+    private boolean isLogActivate;
 
     public void open() throws IOException {
 

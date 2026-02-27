@@ -8,7 +8,6 @@ import org.jspecify.annotations.NullMarked;
 @AllArgsConstructor
 @Getter
 @Setter
-@NullMarked
 @ToString
 public class FtpConfig{
          private String server;
