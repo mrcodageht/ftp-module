@@ -125,7 +125,6 @@ public class Main {
 }
 
 ```
-
 ### Exemple simple (Avec spring boot)
 
 - Creation d’un component pour charger tes variables d’environnement
