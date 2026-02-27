@@ -24,7 +24,6 @@ L’objectif du **FTP Module** est de :
     - `listFiles()` : Lister les fichiers distants.
     - `uploadFile()` : Envoyer un fichier sur le serveur.
     - `downloadFile()` : Télécharger un fichier distant.
-    - `deleteFile()` : Supprimer un fichier distant.
 - Gestion automatique de la connexion (ouverture, validation, fermeture).
 - Support des environnements configurables (`.env`, variables Docker, Spring Config, etc.).
 - Logging et gestion des erreurs intégrés.
