@@ -6,7 +6,7 @@
 
     <groupId>com.mrccommunity.ftpmodule</groupId>
     <artifactId>ftp-module</artifactId>
-    <version>1.0</version>
+    <version>1.0.1</version>
     <packaging>jar</packaging>
 
 
@@ -29,12 +29,14 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
             <version>7.0.0-M9</version>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.18.30</version> <!-- ou plus récent -->
             <scope>provided</scope>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
@@ -45,6 +47,7 @@
             <groupId>commons-net</groupId>
             <artifactId>commons-net</artifactId>
             <version>3.11.1</version>
+            <optional>true</optional>
         </dependency>
     </dependencies>
 
