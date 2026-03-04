@@ -11,6 +11,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Map;
 
 public record FTPUtils(FtpClient ftp) implements IFtpClient {
     private static final Logger log = LogManager.getLogger(FTPUtils.class);
@@ -18,7 +19,6 @@ public record FTPUtils(FtpClient ftp) implements IFtpClient {
     @Override
     public void upFTP() {
         try {
-
             this.ftp.open();
             this.ftp.getFtp().setFileType(FTP.BINARY_FILE_TYPE);
             log.info("Connexion avec le serveur ftp");
@@ -38,29 +38,48 @@ public record FTPUtils(FtpClient ftp) implements IFtpClient {
         }
     }
 
+    /**
+     *
+     * @param path : The path of files to list
+     * @return collection with the filename and it sizes
+     * @throws IOException
+     */
     @Override
-    public Collection<String> listFiles(String path) throws IOException {
+    public Collection<Map<String, String>> listFiles(String path) throws IOException {
         upFTP();
         FTPFile[] files = this.ftp.getFtp().listFiles(path);
         downFTP();
         return Arrays.stream(files)
                 .filter(FTPFile::isFile)
-                .map(FTPFile::getName)
+                .map(f -> Map.of("name", f.getName(), "size", String.valueOf(f.getSize())))
                 .toList();
     }
 
+    /**
+     *
+     * @param f_source The path of the file on the ftp server
+     * @param f_destination The path where you want to put the file to download
+     * @throws IOException
+     */
     @Override
     public void downloadFile(String f_source, String f_destination) throws IOException {
         upFTP();
-        FileOutputStream fos = new FileOutputStream(f_destination);
-        this.ftp.getFtp().retrieveFile(f_source, fos);
-        downFTP();
+        try(FileOutputStream fos = new FileOutputStream(f_destination)) {
+            this.ftp.getFtp().retrieveFile(f_source, fos);
+        }finally {
+            downFTP();
+        }
     }
 
+    /**
+     *
+     * @param file : The file to save
+     * @param path The path where you want to save file
+     * @throws IOException
+     */
     @Override
     public void uploadingFile(File file, String path) throws IOException {
         log.info("Taille fichier à envoyer : {}", file.length());
-        log.info("Chemin FTP de destination : {}", path);
         upFTP();
 
         try (FileInputStream fis = new FileInputStream(file)) {
@@ -77,7 +96,12 @@ public record FTPUtils(FtpClient ftp) implements IFtpClient {
         }
     }
 
-
+    /**
+     *
+     * @param folderName the foldername to create
+     * @return true if the folder has created successfully
+     * @throws IOException
+     */
     @Override
     public boolean createFolder(String folderName) throws IOException {
         upFTP();
@@ -88,6 +112,12 @@ public record FTPUtils(FtpClient ftp) implements IFtpClient {
         return isCreated;
     }
 
+    /**
+     *
+     * @param directoryPath The dictory path to check
+     * @return return a boolean trur or false
+     * @throws IOException
+     */
     @Override
     public boolean doesFtpDirectoryExist(String directoryPath) throws IOException {
 

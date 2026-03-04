@@ -4,9 +4,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.mrccommunity.ftpmodule</groupId>
+    <groupId>com.mrccommunity</groupId>
     <artifactId>ftp-module</artifactId>
-    <version>1.0.1</version>
+    <version>1.1.0</version>
     <packaging>jar</packaging>
 
 
@@ -29,14 +29,12 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
             <version>7.0.0-M9</version>
-            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.18.30</version> <!-- ou plus récent -->
             <scope>provided</scope>
-            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
@@ -48,6 +46,27 @@
             <artifactId>commons-net</artifactId>
             <version>3.11.1</version>
             <optional>true</optional>
+        </dependency>
+
+<!--        Dependency for spring test -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>7.0.5</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- Source: https://mvnrepository.com/artifact/junit/junit -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.10.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockftpserver</groupId>
+            <artifactId>MockFtpServer</artifactId>
+            <version>3.2.0</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

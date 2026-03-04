@@ -1,14 +1,10 @@
 package com.mrccommunity.ftpmodule.config;
 
 import lombok.*;
-import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
-@Getter
-@Setter
-@ToString
+@Data
 public class FtpConfig{
          private String server;
 
@@ -17,4 +13,6 @@ public class FtpConfig{
          private String user;
 
          private String password;
+
+         @Nullable private Boolean isLogActivate;
 }

@@ -49,6 +49,7 @@ public class FtpClient {
     }
 
     public void close() throws IOException {
+        this.ftp.logout();
         ftp.disconnect();
     }
 
