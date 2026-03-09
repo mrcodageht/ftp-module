@@ -38,12 +38,7 @@ public record FTPUtils(FtpClient ftp) implements IFtpClient {
         }
     }
 
-    /**
-     *
-     * @param path : The path of files to list
-     * @return collection with the filename and it sizes
-     * @throws IOException
-     */
+
     @Override
     public Collection<Map<String, String>> listFiles(String path) throws IOException {
         upFTP();
@@ -55,12 +50,7 @@ public record FTPUtils(FtpClient ftp) implements IFtpClient {
                 .toList();
     }
 
-    /**
-     *
-     * @param f_source The path of the file on the ftp server
-     * @param f_destination The path where you want to put the file to download
-     * @throws IOException
-     */
+
     @Override
     public void downloadFile(String f_source, String f_destination) throws IOException {
         upFTP();
@@ -71,12 +61,7 @@ public record FTPUtils(FtpClient ftp) implements IFtpClient {
         }
     }
 
-    /**
-     *
-     * @param file : The file to save
-     * @param path The path where you want to save file
-     * @throws IOException
-     */
+
     @Override
     public void uploadingFile(File file, String path) throws IOException {
         log.info("Taille fichier à envoyer : {}", file.length());
@@ -96,12 +81,7 @@ public record FTPUtils(FtpClient ftp) implements IFtpClient {
         }
     }
 
-    /**
-     *
-     * @param folderName the foldername to create
-     * @return true if the folder has created successfully
-     * @throws IOException
-     */
+
     @Override
     public boolean createFolder(String folderName) throws IOException {
         upFTP();
@@ -112,12 +92,7 @@ public record FTPUtils(FtpClient ftp) implements IFtpClient {
         return isCreated;
     }
 
-    /**
-     *
-     * @param directoryPath The dictory path to check
-     * @return return a boolean trur or false
-     * @throws IOException
-     */
+
     @Override
     public boolean doesFtpDirectoryExist(String directoryPath) throws IOException {
 
