@@ -20,3 +20,4 @@ Ajout des tests unitaires pour les methodes :
 - [ ] L'evolution du module
 
 ### Features
+- [ ] Lors de la recuperation de la liste des fichiers dans une dossier `listFile`, on pemettra a l'application de recuperer une liste en recursive, c-a-d, de lister les fichiers dans les dossiers aussi.
