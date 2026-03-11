@@ -18,7 +18,7 @@ public sealed interface IFtpClient permits FTPUtils {
      * @return collection with the filename and it sizes
      * @throws IOException
      */
-    Collection<Map<String, String>> listFiles(String path)throws IOException;
+    Collection<FtpFile> listFiles(String path)throws IOException;
 
     /**
      *

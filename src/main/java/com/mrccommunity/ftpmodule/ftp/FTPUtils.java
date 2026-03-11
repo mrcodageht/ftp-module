@@ -1,6 +1,7 @@
 package com.mrccommunity.ftpmodule.ftp;
 
 import org.apache.commons.net.ftp.FTP;
+import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -9,9 +10,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Map;
+import java.util.*;
 
 public record FTPUtils(FtpClient ftp) implements IFtpClient {
     private static final Logger log = LogManager.getLogger(FTPUtils.class);
@@ -38,18 +37,18 @@ public record FTPUtils(FtpClient ftp) implements IFtpClient {
         }
     }
 
-
     @Override
-    public Collection<Map<String, String>> listFiles(String path) throws IOException {
-        upFTP();
-        FTPFile[] files = this.ftp.getFtp().listFiles(path);
-        downFTP();
-        return Arrays.stream(files)
-                .filter(FTPFile::isFile)
-                .map(f -> Map.of("name", f.getName(), "size", String.valueOf(f.getSize())))
-                .toList();
+    public Collection<FtpFile> listFiles(String path) throws IOException {
+        try {
+            upFTP();
+            FTPFile[] files = ftp.getFtp().listFiles(path);
+            return Arrays.stream(files)
+                    .map(FtpFile::mapToFtpFile)
+                    .toList();
+        } finally {
+            downFTP();
+        }
     }
-
 
     @Override
     public void downloadFile(String f_source, String f_destination) throws IOException {
@@ -82,6 +81,7 @@ public record FTPUtils(FtpClient ftp) implements IFtpClient {
     }
 
 
+
     @Override
     public boolean createFolder(String folderName) throws IOException {
         upFTP();
@@ -103,6 +103,11 @@ public record FTPUtils(FtpClient ftp) implements IFtpClient {
             return true;
         }
         downFTP();
+        return false;
+    }
+
+    @Override
+    public boolean removeFile(String filename) {
         return false;
     }
 }
