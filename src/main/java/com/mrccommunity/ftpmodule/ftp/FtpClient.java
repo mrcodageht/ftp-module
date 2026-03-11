@@ -3,7 +3,10 @@ package com.mrccommunity.ftpmodule.ftp;
 import com.mrccommunity.ftpmodule.config.FtpConfig;
 import lombok.*;
 import org.apache.commons.net.PrintCommandListener;
+import org.apache.commons.net.ProtocolCommandEvent;
+import org.apache.commons.net.ProtocolCommandListener;
 import org.apache.commons.net.ftp.FTPClient;
+import org.apache.commons.net.ftp.FTPClientConfig;
 import org.apache.commons.net.ftp.FTPReply;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -38,12 +41,29 @@ public class FtpClient {
 
         if(isLogActivate){
             ftp.addProtocolCommandListener(
-                    new PrintCommandListener(
-                            new PrintWriter(new OutputStreamWriter(System.out, StandardCharsets.UTF_8)), true));
+                new ProtocolCommandListener(){
+
+                    @Override
+                    public void protocolCommandSent(ProtocolCommandEvent protocolCommandEvent) {
+                        System.out.printf("[%s][%d] Command sent : [%s]-%s", Thread.currentThread().getName(),
+                                System.currentTimeMillis(), protocolCommandEvent.getCommand(),
+                                protocolCommandEvent.getMessage());
+                    }
+
+                    @Override
+                    public void protocolReplyReceived(ProtocolCommandEvent protocolCommandEvent) {
+                        System.out.printf("[%s][%d] Reply received : %s", Thread.currentThread().getName(),
+                                System.currentTimeMillis(), protocolCommandEvent.getMessage());
+                    }
+                }
+            );
 
         }
 
-        if(!this.ftp.login(this.ftpConfig.getUser(), this.ftpConfig.getPassword()))
+        String user = this.ftpConfig.getUser();
+        String password = this.ftpConfig.getPassword();
+
+        if(!this.ftp.login(user, password))
             log.error("==> La connexion avec le serveur ftp {} n'a pas ete etablie.",this.ftpConfig.getServer());
         this.ftp.enterLocalPassiveMode();
     }
